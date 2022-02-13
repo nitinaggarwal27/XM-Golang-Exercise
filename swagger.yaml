@@ -1,0 +1,313 @@
+openapi: 3.0.0
+info:
+  title: XM Exercise
+  version: 1.0.0
+servers: 
+  - url : http://127.0.0.1:8001
+    description : local url
+components:
+  securitySchemes:
+    bearer:            
+      type: http
+      scheme: bearer
+      bearerFormat: JWT  
+
+paths:
+  /v1/login:
+    post:
+      summary: Login to fetch JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: JSON response
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+                  id:
+                    type: string
+                  email:
+                    type: string
+                  name:
+                    type: string
+                  role:
+                    type: string
+        '401' :
+          description: JSON response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    format: bool
+                    example: true
+                  message:
+                    type: string
+                    format: string
+                    example: "Please enter correct credentials"
+  /v1/company:
+    post:
+      summary: Create new company
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                code:
+                  type: string
+                country:
+                  type: string
+                phone:
+                  type: string
+                website:
+                  type: string
+      responses:
+        '200':
+          description: JSON response
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    format: bool
+                    example: false
+                  message:
+                    type: string
+                    format: string
+                    example: "company added successfuly"
+        '400' :
+          description: JSON response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    format: bool
+                    example: true
+                  message:
+                    type: string
+                    format: string
+                    example: "Please enter required fields"
+      security:
+        - bearer: []
+        
+    get:
+      summary: List all companies
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: string
+          description: number of items to show
+        - in: query
+          name: page
+          schema:
+            type: string
+          description: page number of list
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: search on the basis of name
+      responses:
+        '200':
+          description: JSON response
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    format: bool
+                    example: false
+                  list: 
+                    type : array
+                    items:
+                      type: object
+                      properties:
+                        ID:
+                          type: integer
+                        name:
+                          type: string
+                        code:
+                          type: string
+                        country:
+                          type: string
+                        phone:
+                          type: string
+                        website:
+                          type: string
+                        CreatedAt:
+                          type: integer
+                        UpdatedAt:
+                          type: integer
+  
+  /v1/company/{id}:    
+    get:
+      summary: Fetch details of a company
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the company
+          required: true
+      responses:
+        '200':
+          description: Success response
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ID:
+                    type: integer
+                  name:
+                    type: string
+                  code:
+                    type: string
+                  country:
+                    type: string
+                  phone:
+                    type: string
+                  website:
+                    type: string
+                  CreatedAt:
+                    type: integer
+                  UpdatedAt:
+                    type: integer
+        '400':
+          description: When no data found
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    format: bool
+                    example: true
+                  message:
+                    type: string
+                    example: "company not found"
+    put:
+      summary: Update a company details
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the company
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                code:
+                  type: string
+                country:
+                  type: string
+                phone:
+                  type: string
+                website:
+                  type: string
+      responses:
+        '200':
+          description: Success response
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    format: bool
+                    example: false
+                  message:
+                    type: string
+                    example: "company updated successfully"
+        '400':
+          description: When no data found
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    format: bool
+                    example: true
+                  message:
+                    type: string
+                    example: "company not found"
+      security:
+        - bearer: []
+    delete:
+      summary: Delete a company
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          description: id of the company
+          required: true
+      responses:
+        '200':
+          description: Success response
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    format: bool
+                    example: false
+                  message:
+                    type: string
+                    example: "company deleted successfully"
+        '400':
+          description: When no data found
+          content: 
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    format: bool
+                    example: true
+                  message:
+                    type: string
+                    example: "company not found"
+      security:
+        - bearer: []

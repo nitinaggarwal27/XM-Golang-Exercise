@@ -93,6 +93,7 @@ func ConfigurationWithToml(filePath string) error {
 		log.Println(err)
 		return err
 	}
+	log.Println(Conf)
 
 	// set constants
 	//JWT Token Timeout in minutes

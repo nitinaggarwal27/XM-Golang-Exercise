@@ -18,7 +18,6 @@ func GetDB() *gorm.DB {
 	return db
 }
 
-//
 func SetupConnection() {
 	switch config.Conf.Database.Engine {
 	case "sqlite":

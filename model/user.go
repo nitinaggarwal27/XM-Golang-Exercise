@@ -31,7 +31,7 @@ func InitAdminAccount() User {
 	// fetching info from env variables
 	adminEmail := config.Conf.Admin.Email
 	if adminEmail == "" {
-		adminEmail = "admin@xenonstack.com"
+		adminEmail = "admin@xm.com"
 	}
 	adminPass := config.Conf.Admin.Pass
 	if adminPass == "" {
