@@ -1,11 +1,12 @@
 [Service]
   Port = "8001"
   Environment = "development"
+  ValidLocations = "India,Cyprus"
 [Database]
-  name = "xm_exercise"
-  engine = "sqlite"
-  host = "localhost"
-  port = "5432"
-  user = "postgres"
-  pass = "postgres"
-  ideal = "50"
+  Name = "xm_exercise"
+  Engine = "sqlite"
+[JWT]
+  PrivateKey="abcd"
+[Admin]
+  Email = "admin@xm.com"
+  Pass = "admin"

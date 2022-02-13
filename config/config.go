@@ -12,6 +12,7 @@ import (
 type Config struct {
 	Service  Service
 	Database Database
+	Admin    Admin
 	JWT      JWT
 }
 
@@ -24,14 +25,20 @@ type Database struct {
 	User   string
 	Pass   string
 	Ssl    string
-	Ideal  string
 }
 
 // Service is a structure for service specific related configuration
 type Service struct {
-	Port        string
-	Environment string
-	Build       string
+	Port           string
+	Environment    string
+	Build          string
+	ValidLocations string
+}
+
+// Admin is a structure for admin account credentials
+type Admin struct {
+	Email string
+	Pass  string
 }
 
 // JWT is structure for jwt token specific configuration
@@ -49,18 +56,20 @@ var (
 
 // ConfigurationWithEnv is a method to initialize configuration with environment variables
 func ConfigurationWithEnv() {
-	// postgres database configuration
+	// database configuration
+	Conf.Database.Engine = os.Getenv("DB_ENGINE")
 	Conf.Database.Host = os.Getenv("DB_HOST")
-	Conf.Database.Engine = os.Getenv("DB_PORT")
 	Conf.Database.Port = os.Getenv("DB_PORT")
 	Conf.Database.User = os.Getenv("DB_USER")
 	Conf.Database.Pass = os.Getenv("DB_PASS")
 	Conf.Database.Name = os.Getenv("DB_NAME")
-	Conf.Database.Ideal = os.Getenv("DB_IDEAL_CONNECTIONS")
 	Conf.Database.Ssl = "disable"
+	//admin credentials
+	Conf.Admin.Email = os.Getenv("ADMIN_EMAIL")
+	Conf.Admin.Pass = os.Getenv("ADMIN_PASS")
 
 	// if service port is not defined set default port
-	if os.Getenv("_PORT") != "" {
+	if os.Getenv("PORT") != "" {
 		Conf.Service.Port = os.Getenv("PORT")
 	} else {
 		Conf.Service.Port = "8000"

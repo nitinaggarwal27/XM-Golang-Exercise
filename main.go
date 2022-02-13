@@ -6,9 +6,8 @@ import (
 	"os"
 
 	"nitinaggarwal27/XM-Golang-Exercise/config"
-
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
+	"nitinaggarwal27/XM-Golang-Exercise/database"
+	"nitinaggarwal27/XM-Golang-Exercise/router"
 )
 
 func main() {
@@ -41,50 +40,9 @@ func main() {
 		os.Exit(1)
 	}
 
-	//create database
-	// err := database.CreateDatabase()
-	// if err != nil {
-	// 	return
-	// }
-	// //database config
-	// dbConfig := config.DBConfig()
-	// //number of ideal connections
-	// var ideal int
-	// idealStr := config.Conf.Database.Ideal
-	// if idealStr == "" {
-	// 	ideal = 50
-	// } else {
-	// 	ideal, _ = strconv.Atoi(idealStr)
-	// }
-	// connecting db using connection string
-	// db, err := gorm.Open("postgres", dbConfig)
-	// // fmt.Println(dbConfig)
-	// if err != nil {
-	// 	log.Println(err)
-	// 	return
-	// }
-	// // close db instance whenever whole work completed
-	// defer db.Close()
-	// db.DB().SetMaxIdleConns(ideal)
-	// db.DB().SetConnMaxLifetime(1 * time.Hour)
-	// config.DB = db
+	//setup database
+	database.SetupConnection()
 
-	//create auth-team database tables
-	// database.CreateDBTablesIfNotExists()
-
-	//wg.Wait()
-	// initialize gin router
-	router := gin.Default()
-
-	//allowing CORS
-	corsConfig := cors.DefaultConfig()
-	corsConfig.AllowAllOrigins = true
-	corsConfig.AddAllowHeaders("Authorization")
-	corsConfig.AddAllowMethods("DELETE")
-	router.Use(cors.New(corsConfig))
-
-	// service specific routes
-	// api.Routes(router)
-	// run the service
-	router.Run(":" + config.Conf.Service.Port)
+	// initialize and run gin router
+	router.Routes().Run(":" + config.Conf.Service.Port)
 }
